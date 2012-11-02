@@ -1,0 +1,56 @@
+#!/sbin/runscript
+# Start devmon on startup as non-root user
+#
+# Copyright (C) 2012 Lars Moellendorf <lars[at]moellendorf[dot]eu>
+# Distributed under the terms of the GNU General Public License v2
+#
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+NO_ZENITY="${NO_ZENITY:-1}"
+[ ${NO_ZENITY} -eq 1 ] && DEVMON_OPTS+=" -g "
+PIDFILE=/var/run/devmon.pid
+LOG_OPTIONS="-i -t devmon"
+DEVMON_USER="${DEVMON_USER:-devmon}"
+DEVMON_GROUP="${DEVMON_GROUP:-plugdev}"
+POLLING_INTERVAL="${POLLING_INTERVAL:-2000}"
+
+depend() {
+# depens on udev
+    need udev
+    use logger
+}
+
+start() {
+# enable kernel polling
+    echo ${POLLING_INTERVAL} > /sys/module/block/parameters/events_dfl_poll_msecs
+
+    ebegin "Starting devmon"
+        start-stop-daemon --start \
+        --user ${DEVMON_USER} \
+        --group ${DEVMON_GROUP} \
+        --make-pidfile \
+        --pidfile ${PIDFILE} \
+        --exec /usr/bin/devmon -- ${DEVMON_OPT} 2>&1 | logger ${LOG_OPTIONS} &
+    eend $?
+}
+
+stop() {
+    ebegin "Stopping devmon"
+        start-stop-daemon --stop --exec /usr/bin/devmon \
+        --pidfile ${PIDFILE}
+    eend $?
+}
