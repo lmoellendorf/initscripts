@@ -27,7 +27,9 @@ LOG_OPTIONS="-i -t devmon"
 DEVMON_USER="${DEVMON_USER:-devmon}"
 DEVMON_GROUP="${DEVMON_GROUP:-plugdev}"
 POLLING_INTERVAL="${POLLING_INTERVAL:-2000}"
+MOUNT_OPTIONS="${MOUNT_OPTIONS:-noexec,nosuid,nodev,noatime,rw,fmask=0002,dmask=0002}"
 
+DEVMON_OPTS="--mount-options ${MOUNT_OPTIONS}"
 depend() {
 # depens on udev
     need udev
@@ -44,7 +46,7 @@ start() {
         --group ${DEVMON_GROUP} \
         --make-pidfile \
         --pidfile ${PIDFILE} \
-        --exec /usr/bin/devmon -- ${DEVMON_OPT} 2>&1 | logger ${LOG_OPTIONS} &
+        --exec /usr/bin/devmon -- ${DEVMON_OPTS} 2>&1 | logger ${LOG_OPTIONS} &
     eend $?
 }
 

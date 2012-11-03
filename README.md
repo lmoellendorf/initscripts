@@ -46,11 +46,13 @@ Prerequisites
 `emerge -av sys-apps/udevil sys-block/eject`
 devmon will be installed together with udevil.
 
-2. To be able to umount the device without being root, install pmount
-`emerge -av sys-apps/pmount`
-
-3. Add a new user for devmon:
+2. Add a new user for devmon:
 `useradd -c "added by me for devmon" -d "/dev/null" -g plugdev -M -N -r -s /sbin/nologin devmon`
+
+3. To enable the users of the group *plugdev* to write to the removable devices,
+edit */etc/udevil/udevil.conf* and add *fmask=0002* and *dmask=0002* to the
+allowed mount options (*allowed_options*):
+`allowed_options = nosuid, noexec, nodev, noatime, fmask=0022, dmask=0022, fmask=0002, dmask=0002, uid=$UID, gid=$GID, ro, rw, sync, flush, remount`
 
 4. Follow the instructions in the *General Usage* section above to install the
 initscript.
@@ -60,6 +62,6 @@ Usage
 
 When a device is plugged in it is automatically mounted by devmon using udevil.
 
-To umount the device by a non-root user use *pumount*:
-`pumount /media/my-sd-card`
+To umount the device by a non-root user use *udevil*:
+`udevil umount /media/my-sd-card`
 
