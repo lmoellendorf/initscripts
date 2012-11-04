@@ -31,7 +31,7 @@ group *root* and adjust its permissions:
 6. Start the deamon with:
 
     /etc/init.d/devmon start
-    
+
 7. Add it to the appropriate runlevel:
 
     rc-update add devmon default
@@ -63,7 +63,7 @@ Prerequisites
 
     echo ~sys-apps/udevil-0.3.1 >> /etc/portage/package.keywords/udevil
     emerge -av sys-apps/udevil sys-block/eject
-    
+
 devmon will be installed together with udevil.
 
 2. Add a new user for devmon:
@@ -74,7 +74,7 @@ devmon will be installed together with udevil.
 edit */etc/udevil/udevil.conf* and add *fmask=0002* and *dmask=0002* to the
 allowed mount options (allowed_options*:
 
-    allowed_options = nosuid, noexec, nodev, noatime, fmask=0022, dmask=0022, fmask=0002, dmask=0002, uid=$UID, gid=$GID, ro, rw, sync, flush, remoun
+    allowed_options = nosuid, noexec, nodev, noatime, fmask=0022, dmask=0022, fmask=0002, dmask=0002, uid=$UID, gid=$GID, ro, rw, sync, flush, remount
 
 4. Follow the instructions in the *General Usage* section above to install the
 initscript.
