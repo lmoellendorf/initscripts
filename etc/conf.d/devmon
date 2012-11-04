@@ -1,0 +1,32 @@
+# /etc/conf.d/devmon: config file for /etc/init.d/distccd
+
+# This daemon was written with a headless system in mind, therfore pop-up
+# dialogs that require an X-server are disabled by default.
+# 1: Do not show spacefm/zenity pop-up dialogs
+# 0 (or any other value than 1): Show the spacefm/zenity pop-up dialogs
+#NO_ZENITY="1"
+
+# The user and group under which devmon is run.
+# By default it is expected, that a user for devmon has been created, using
+# this command:
+# `useradd -c "added by me for devmon" -d "/dev/null" -g plugdev -M -N -r -s /sbin/nologin devmon`
+# Here you may change this default:
+#DEVMON_USER="devmon"
+#DEVMON_GROUP="plugdev"
+
+# The kernel has to poll ejectable drives and report media change (and eject)
+# events through udev. Here you may specify the kernel polling interval in
+# milliseconds:
+#POLLING_INTERVAL="2000"
+
+# The mount options passed to udevil and added to udevil's default options.
+# By default fmask and dmask are set to grant users of the plugdev group
+# read/write permissions
+#MOUNT_OPTIONS="fmask=0002,dmask=0002"
+
+# devmon options. See 'devmon --help' for a list of options. Only AUTOMOUNT and
+# UNIVERSAL options can be applied.
+# For mount options use the MOUNT_OPTIONS variable.
+# Only use if you know what you are doing!
+#DEVMON_OPTS=""
+

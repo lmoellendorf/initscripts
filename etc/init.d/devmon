@@ -20,17 +20,19 @@
 #
 # See COPYING file.
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+# These options may be changed in /etc/conf.d/devmon
 NO_ZENITY="${NO_ZENITY:-1}"
-[ ${NO_ZENITY} -eq 1 ] && DEVMON_OPTS+=" -g "
-PIDFILE=/var/run/devmon.pid
-LOG_OPTIONS="-i -t devmon"
 DEVMON_USER="${DEVMON_USER:-devmon}"
 DEVMON_GROUP="${DEVMON_GROUP:-plugdev}"
 POLLING_INTERVAL="${POLLING_INTERVAL:-2000}"
-MOUNT_OPTIONS="${MOUNT_OPTIONS:-noexec,nosuid,nodev,noatime,rw,fmask=0002,dmask=0002}"
+MOUNT_OPTIONS="${MOUNT_OPTIONS:-fmask=0002,dmask=0002}"
 
-DEVMON_OPTS="--mount-options ${MOUNT_OPTIONS}"
+# These options should not be changed
+LOG_OPTIONS="-i -t devmon"
+PIDFILE="/var/run/devmon.pid"
+[ ${NO_ZENITY} -eq 1 ] && DEVMON_OPTS+=" -g "
+DEVMON_OPTS+=" --mount-options ${MOUNT_OPTIONS} "
+
 depend() {
 # depens on udev
     need udev
@@ -39,6 +41,7 @@ depend() {
 
 start() {
 # enable kernel polling
+    logger ${LOG_OPTIONS} "Kernel polling interval set to ${POLLING_INTERVAL}ms"
     echo ${POLLING_INTERVAL} > /sys/module/block/parameters/events_dfl_poll_msecs
 
     ebegin "Starting devmon"

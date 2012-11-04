@@ -8,14 +8,21 @@ General Usage
 =============
 
 1. Copy, move or link the script into */etc/init.d/*, e.g.:
-`ln -s devmon /etc/init.d/devmon`
-2. Make the script under */etc/init.d/* executable and change it ownership to
+`ln -s ./etc/init.d/devmon /etc/init.d/devmon`
+2. Make the script under */etc/init.d/* executable and change its ownership to
 user *root*, group *root*:
 `chmod 755 /etc/init.d/devmon`
 `chown root:root /etc/init.d/devmon`
-3. Start the deamon with:
+3. If existant, copy, move or link the configuration file to */etc/conf.d/*
+`ln -d ./etc/conf.d/devmon /etc/conf.d/devmon`
+4. Change the ownership of the script under */etc/conf.d/* to user *root*,
+group *root* and adjust its permissions:
+`chmod 644 /etc/conf.d/devmon`
+`chown root:root /etc/conf.d/devmon`
+5. Optionally adjust the configuration file to your needs.
+6. Start the deamon with:
 `/etc/init.d/devmon start`
-4. Add it to the appropriate runlevel:
+7. Add it to the appropriate runlevel:
 `rc-update add devmon default`
 
 devmon
