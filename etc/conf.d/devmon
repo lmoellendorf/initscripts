@@ -1,4 +1,4 @@
-# /etc/conf.d/devmon: config file for /etc/init.d/distccd
+# /etc/conf.d/devmon: config file for /etc/init.d/devmon
 
 # This daemon was written with a headless system in mind, therfore pop-up
 # dialogs that require an X-server are disabled by default.
